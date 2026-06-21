@@ -1,0 +1,19 @@
+{
+  "overview": "A stealth AI Interview Assistant that captures interviewer speech in real-time, generates humanized answers instantly, and displays them in a compact, always-on-top overlay invisible during screen sharing.",
+  "features": [
+    "Real-time audio capture and transcription",
+    "AI-powered humanized answer generation",
+    "Compact stealth overlay widget",
+    "Session history management",
+    "Profile and role targeting for contextual answers"
+  ],
+  "category": "tool",
+  "tags": [
+    "ai",
+    "interview",
+    "productivity",
+    "speech-to-text",
+    "assistant"
+  ],
+  "last_updated": "2026-06-21T08:00:51.528Z"
+}

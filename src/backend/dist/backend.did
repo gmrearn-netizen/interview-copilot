@@ -1,0 +1,112 @@
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserProfile = 
+ record {
+   age: opt nat;
+   degree: opt text;
+   education: opt text;
+   experienceLevel: opt ExperienceLevel;
+   name: text;
+   preferredLanguage: opt text;
+   skills: vec text;
+   targetCompany: opt text;
+   targetRole: opt text;
+ };
+type Timestamp = nat;
+type SessionSummary = 
+ record {
+   createdAt: Timestamp;
+   id: SessionId;
+   name: text;
+   qaCount: nat;
+ };
+type SessionId = nat;
+type Result = 
+ variant {
+   err: Error;
+   ok;
+ };
+type QAPairId = nat;
+type QAPair = 
+ record {
+   answer: text;
+   id: QAPairId;
+   question: text;
+   timestamp: Timestamp;
+ };
+type InterviewSession = 
+ record {
+   createdAt: Timestamp;
+   id: SessionId;
+   name: text;
+   qaPairs: vec QAPair;
+ };
+type ExperienceLevel = 
+ variant {
+   fresher;
+   junior;
+   lead;
+   mid;
+   senior;
+ };
+type Error = 
+ variant {
+   AmbiguousAttribute: record {
+                         field: text;
+                         sources: vec text;
+                       };
+   FrontendOriginMismatch: record {
+                             expected: vec text;
+                             got: text;
+                           };
+   FrontendOriginsNotConfigured;
+   MalformedCandid;
+   MissingField: text;
+   MixedSsoSources: record {
+                      otherKeys: vec text;
+                      ssoKeys: vec text;
+                    };
+   NoAttributes;
+   Stale: record {ageNs: nat;};
+   UnknownNonce;
+   UntrustedSsoSource: record {domain: text;};
+ };
+service : {
+  __accessControlState: () -> (reserved) query;
+  __openAIKeys: (ko: opt principal, count: opt nat) ->
+   (vec record {
+          principal;
+          text;
+        }) query;
+  __qaCounter: () -> (reserved) query;
+  __sessionCounter: () -> (reserved) query;
+  __sessions: () -> (reserved) query;
+  __userProfiles: (ko: opt principal, count: opt nat) ->
+   (vec record {
+          principal;
+          UserProfile;
+        }) query;
+  _initialize_access_control: () -> ();
+  _internet_identity_sign_in_finish: () -> (Result);
+  _internet_identity_sign_in_start: () -> (blob);
+  addQAPairToSession: (sessionId: SessionId, question: text, answer: 
+   text) -> (opt QAPair);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  clearMyOpenAIApiKey: () -> ();
+  createInterviewSession: (name: text) -> (InterviewSession);
+  deleteInterviewSession: (sessionId: SessionId) -> (bool);
+  generateInterviewAnswer: (question: text) -> (text);
+  getCallerUserProfile: () -> (opt UserProfile) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getInterviewSession: (sessionId: SessionId) -> (opt InterviewSession) query;
+  isCallerAdmin: () -> (bool) query;
+  isMyOpenAIConfigured: () -> (bool) query;
+  listInterviewSessions: () -> (vec SessionSummary) query;
+  regenerateInterviewAnswer: (question: text, previousAnswer: text) -> (text);
+  saveCallerUserProfile: (profile: UserProfile) -> ();
+  setMyOpenAIApiKey: (key: text) -> ();
+}

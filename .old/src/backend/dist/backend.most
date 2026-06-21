@@ -1,0 +1,122 @@
+// Version: 4.0.0
+type Data__80296667<K, V> =
+  {var count : Nat__1040412405; kvs : [var ?(K, V)]};
+type ExperienceLevel__493077921 = {#fresher; #junior; #lead; #mid; #senior};
+type Internal__41346355<K, V> =
+  {children : [var ?Node__1000929467<K, V>]; data : Data__80296667<K, V>};
+type InterviewSession__312073767 =
+  {
+    createdAt : Timestamp__301639476;
+    id : SessionId__1052913375;
+    name : Text;
+    qaPairs : [QAPair__917338305]
+  };
+type Leaf__712614010<K, V> = {data : Data__80296667<K, V>};
+type List__529703492<T> =
+  {
+    var blockIndex : Nat__1040412405;
+    var blocks : [var [var ?T]];
+    var elementIndex : Nat__1040412405
+  };
+type List__560604548<T> = List__529703492<T>;
+type Map__222667396<K, V> = Map__912772452<K, V>;
+type Map__709709801<K, V> =
+  {var root : Node__1000929467<K, V>; var size : Nat__1040412405};
+type Map__912772452<K, V> = Map__709709801<K, V>;
+type Nat__1040412405 = Nat__920180692;
+type Nat__920180692 = Nat;
+type NewActor__864758210 =
+  {
+    var accessControlState :
+      {
+        var adminAssigned : Bool;
+        userRoles : Map__222667396<Principal, {#admin; #guest; #user}>
+      };
+    var openAIKeys : Map__222667396<Principal, Text>;
+    var qaCounter : {var value : Nat};
+    var sessionCounter : {var value : Nat};
+    var sessions :
+      Map__222667396<Principal,
+                      List__560604548<{
+                                        createdAt : Nat;
+                                        id : Nat;
+                                        name : Text;
+                                        qaPairs :
+                                          [{
+                                             answer : Text;
+                                             id : Nat;
+                                             question : Text;
+                                             timestamp : Nat
+                                           }]
+                                      }>>;
+    var userProfiles :
+      Map__222667396<Principal,
+                      {
+                        age : ?Nat;
+                        degree : ?Text;
+                        education : ?Text;
+                        experienceLevel :
+                          ?{#fresher; #junior; #lead; #mid; #senior};
+                        name : Text;
+                        preferredLanguage : ?Text;
+                        skills : [Text];
+                        targetCompany : ?Text;
+                        targetRole : ?Text
+                      }>
+  };
+type Node__1000929467<K, V> =
+  {#internal : Internal__41346355<K, V>; #leaf : Leaf__712614010<K, V>};
+type OldActor__715173921 = {};
+type QAPairId__616176154 = Nat;
+type QAPair__917338305 =
+  {
+    answer : Text;
+    id : QAPairId__616176154;
+    question : Text;
+    timestamp : Timestamp__301639476
+  };
+type SessionId__1052913375 = Nat;
+type Timestamp__301639476 = Nat;
+type UserProfile__446616884 =
+  {
+    age : ?Nat;
+    degree : ?Text;
+    education : ?Text;
+    experienceLevel : ?ExperienceLevel__493077921;
+    name : Text;
+    preferredLanguage : ?Text;
+    skills : [Text];
+    targetCompany : ?Text;
+    targetRole : ?Text
+  };
+type UserRole__686137147 = {#admin; #guest; #user};
+{
+  "20250621_000000_Initial" :
+    (_old : OldActor__715173921) -> NewActor__864758210
+}
+actor  {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__222667396<Principal, UserRole__686137147>
+    };
+  stable openAIKeys :
+    {
+      var root : Node__1000929467<Principal, Text>;
+      var size : Nat__1040412405
+    };
+  stable qaCounter : {var value : Nat};
+  stable sessionCounter : {var value : Nat};
+  stable sessions :
+    {
+      var root :
+        Node__1000929467<Principal,
+                          List__560604548<InterviewSession__312073767>>;
+      var size : Nat__1040412405
+    };
+  stable userProfiles :
+    {
+      var root : Node__1000929467<Principal, UserProfile__446616884>;
+      var size : Nat__1040412405
+    }
+};
